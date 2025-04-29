@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { useFetchProducts } from "../hooks/useFetchProducts";
 import ProductForm from "../components/forms/ProductForm";
+import ProductCard from "../components/productCard/ProductCard";
 
 const Products = () => {
-  const { products, error, isLoading } = useFetchProducts();
+  const { products, refetch, deleteProduct, error, isLoading } =
+    useFetchProducts();
   const [showForm, setShowForm] = useState(false);
 
   console.log(products);
 
   const handleAddProduct = () => {
-    setShowForm(true);
+    setShowForm(!showForm);
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    const result = await deleteProduct(productId);
+
+    console.log(result);
   };
 
   if (isLoading) return <p>Indlæser produkter...</p>;
@@ -19,17 +27,15 @@ const Products = () => {
     <>
       <h1>Produkter</h1>
       <button onClick={() => handleAddProduct()}>Tilføj produkt</button>
-      {showForm && <ProductForm />}
+      {showForm && <ProductForm onProductCreated={refetch} />}
       <ul>
         {products.map((product) => (
-          <li key={product._id}>
-            {product.title} – {product.price} kr.
-            {product.image && <img alt={product.title} src={product.image} />}
-            {/* <div>
-            <button onClick={}>Slet produkt</button>
-            <button onClick={}>Redigér produkt</button>
-            </div> */}
-          </li>
+          <ProductCard
+            product={product}
+            key={product._id}
+            onDelete={handleDeleteProduct}
+            onRefetch={refetch}
+          />
         ))}
       </ul>
     </>

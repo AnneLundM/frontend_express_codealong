@@ -7,7 +7,7 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
   const { createProduct, updateProduct, fetchProductById } = useFetchProducts();
   const { register, handleSubmit, setValue, watch } = useForm();
 
-  const imagePreview = watch("imagepreview");
+  const imagePreview = watch("imagePreview");
 
   // Når vi er i redigeringsmode, skal vi hente eksisterende produktdata
   useEffect(() => {

@@ -49,7 +49,6 @@ const useFetchProducts = () => {
   };
 
   // Update product
-
   const updateProduct = async (productData) => {
     try {
       const response = await fetch(`http://localhost:3042/product`, {
@@ -62,7 +61,7 @@ const useFetchProducts = () => {
       }
 
       const result = await response.json();
-      console.log(result);
+
       return result;
     } catch (error) {
       console.log(error);

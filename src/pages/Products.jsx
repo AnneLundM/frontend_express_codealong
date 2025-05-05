@@ -8,8 +8,6 @@ const Products = () => {
     useFetchProducts();
   const [showForm, setShowForm] = useState(false);
 
-  console.log(products);
-
   const handleAddProduct = () => {
     setShowForm(!showForm);
   };
@@ -28,7 +26,7 @@ const Products = () => {
       <h1>Produkter</h1>
       <button onClick={() => handleAddProduct()}>Tilføj produkt</button>
       {showForm && <ProductForm onProductCreated={refetch} />}
-      <ul>
+      <article>
         {products.map((product) => (
           <ProductCard
             product={product}
@@ -37,7 +35,7 @@ const Products = () => {
             onRefetch={refetch}
           />
         ))}
-      </ul>
+      </article>
     </>
   );
 };

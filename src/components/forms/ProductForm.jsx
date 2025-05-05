@@ -72,16 +72,24 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <label htmlFor='title'>Titel</label>
-      <input id='title' {...register("title", { required: true })} />
+      <input
+        className={styles.input}
+        id='title'
+        {...register("title", { required: true })}
+      />
 
       <label htmlFor='description'>Beskrivelse</label>
-      <input id='description' {...register("description")} />
+      <input
+        className={styles.input}
+        id='description'
+        {...register("description")}
+      />
 
       <label htmlFor='price'>Pris</label>
-      <input id='price' type='number' {...register("price")} />
+      <input className={styles.input} id='price' {...register("price")} />
 
       <label htmlFor='category'>Kategori</label>
-      <input id='category' {...register("category")} />
+      <input className={styles.input} id='category' {...register("category")} />
 
       <label htmlFor='image'>Vælg billede (valgfrit):</label>
       {imagePreview && <img src={imagePreview} alt='Preview' />}
@@ -89,10 +97,13 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
       <input
         id='image'
         type='file'
+        className={styles.input}
         {...register("selectedFile")}
         onChange={handleAddImage}
       />
-      <button type='submit'>Tilføj produkt</button>
+      <button type='submit'>
+        {isEditMode ? "Opdatér produkt" : "Tilføj produkt"}
+      </button>
     </form>
   );
 };

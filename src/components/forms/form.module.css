@@ -8,6 +8,19 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+}
+
 .form h2 {
   text-align: center;
   color: #333;
@@ -30,20 +43,6 @@
   margin: 10px;
 }
 
-.form input[type="text"],
-.form input[type="number"],
-.form input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.form input[type="text"]:focus,
-.form input[type="number"]:focus,
-.form input[type="file"]:focus {
-  border-color: #007bff;
-  outline: none;
+.form button {
+  margin: 10px 0;
 }

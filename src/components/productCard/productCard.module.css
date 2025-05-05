@@ -1,0 +1,21 @@
+.productCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgba(128, 128, 128, 0.189);
+  box-shadow: grey 5px 5px 5px;
+}
+
+.buttonContainer {
+  margin: 10px auto;
+  display: flex;
+  gap: 10px;
+}
+
+.description {
+  font-size: 15px;
+  margin: 2px;
+}

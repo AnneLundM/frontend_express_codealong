@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import styles from "./form.module.css";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import { useForm } from "react-hook-form";
+import { ReactClipLoader } from "../loading/ReactLoader";
 
-const ProductForm = ({ onProductCreated, isEditMode, id }) => {
-  const { createProduct, updateProduct, fetchProductById } = useFetchProducts();
+const ProductForm = ({ onProductCreated, isEditMode, id, showForm }) => {
+  const { createProduct, updateProduct, fetchProductById, isLoading } =
+    useFetchProducts();
   const { register, handleSubmit, setValue, watch } = useForm();
-
   const imagePreview = watch("imagePreview");
 
   // Når vi er i redigeringsmode, skal vi hente eksisterende produktdata
@@ -55,6 +56,7 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
 
       if (response && onProductCreated) {
         onProductCreated();
+        showForm();
       }
     } catch (error) {
       console.log(error);
@@ -68,6 +70,8 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
       setValue("imagePreview", objUrl);
     }
   };
+
+  if (isLoading) return <ReactClipLoader />;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -93,7 +97,6 @@ const ProductForm = ({ onProductCreated, isEditMode, id }) => {
 
       <label htmlFor='image'>Vælg billede (valgfrit):</label>
       {imagePreview && <img src={imagePreview} alt='Preview' />}
-
       <input
         id='image'
         type='file'

@@ -2,20 +2,26 @@ import { useEffect, useState } from "react";
 import useAuth from "./useAuth";
 import { toast } from "react-toastify";
 
-const useFetchProducts = () => {
-  const [products, setProducts] = useState([]);
+const useFetchMessages = () => {
+  const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
 
-  // Get all products
-  const fetchProducts = async () => {
+  // Get all messages
+  const fetchMessages = async () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3042/products");
+      const response = await fetch("http://localhost:3042/messages", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await response.json();
-      setProducts(data.data);
+      setMessages(data.data);
     } catch (error) {
       setError("Der skete en fejl", error);
     } finally {
@@ -23,64 +29,52 @@ const useFetchProducts = () => {
     }
   };
 
-  // Create product
-  const createProduct = async (productData) => {
+  // Create message
+  const createMessage = async (messageData) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3042/product", {
+      const response = await fetch("http://localhost:3042/message", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: productData,
+        body: JSON.stringify(messageData),
       });
 
-      if (!response) {
-        toast.error("Der skete en fejl.");
-        throw new Error("Fejl ved oprettelse af ophold");
+      if (!response.ok) {
+        throw new Error("Fejl ved oprettelse af besked");
       }
 
       const result = await response.json();
 
-      if (result.statusCode === 201) {
-        toast.success(`${result.message}`);
-      }
-
       return result;
     } catch (error) {
       console.log(error);
-      toast.error(`Der skete en fejl: ${error}`);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Refetch
-  const refetchProducts = () => {
-    fetchProducts();
-  };
-
-  // Update product
-  const updateProduct = async (productData) => {
+  // Update message
+  const updateMessage = async (messageData) => {
     try {
-      const response = await fetch(`http://localhost:3042/product`, {
+      const response = await fetch(`http://localhost:3042/message`, {
         method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: productData,
+        body: JSON.stringify(messageData),
       });
-
-      if (response.status === "error") {
-        console.log("fejl");
-      }
 
       const result = await response.json();
 
       if (result.statusCode === 200) {
         toast.success(`${result.message}`);
       }
+      refetchMessages();
 
       return result;
     } catch (error) {
@@ -88,12 +82,18 @@ const useFetchProducts = () => {
     }
   };
 
-  // Delete product
-  const deleteProduct = async (id) => {
+  // Refetch
+  const refetchMessages = () => {
+    fetchMessages();
+  };
+
+  // Delete message
+  const deleteMessage = async (id) => {
     setIsLoading(true);
     setError(null);
+
     try {
-      const response = await fetch(`http://localhost:3042/product/${id}`, {
+      const response = await fetch(`http://localhost:3042/message/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,7 +105,7 @@ const useFetchProducts = () => {
       }
 
       const result = await response.json();
-
+      refetchMessages();
       return result;
     } catch (error) {
       console.error(error);
@@ -116,31 +116,30 @@ const useFetchProducts = () => {
   };
 
   // Get by ID
-  const fetchProductById = async (id) => {
+  const fetchMessageById = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3042/product/${id}`);
-      const result = await response.json();
-
-      return result.data;
+      const response = await fetch(`http://localhost:3042/message/${id}`);
+      const data = await response.json();
+      return data.data;
     } catch (error) {
       console.log("fejl", error);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchMessages();
   }, []);
 
   return {
-    products,
-    createProduct,
-    deleteProduct,
-    updateProduct,
-    fetchProductById,
-    refetchProducts,
+    messages,
+    createMessage,
+    updateMessage,
+    deleteMessage,
+    fetchMessageById,
+    refetchMessages,
     error,
     isLoading,
   };
 };
 
-export { useFetchProducts };
+export { useFetchMessages };
